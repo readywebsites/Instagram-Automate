@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-Year & 90-Day Content Dashboard - IG Scheduler</title>
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --primary-gradient: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            --dark-bg: #111827;
+            --dark-card: #1f2937;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .app-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--dark-bg);
+            color: #94a3b8;
+            z-index: 1030;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 24px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .sidebar-brand span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-menu {
+            padding: 16px 12px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .menu-header {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+            padding: 16px 12px 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: var(--dark-card);
+            color: #ffffff;
+        }
+
+        .sidebar-link.active i {
+            color: #ec4899;
+        }
+
+        /* Main Content */
+        .app-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        /* Topbar */
+        .app-topbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .content-container {
+            padding: 32px;
+            flex: 1;
+        }
+
+        .card-custom {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        .badge-scheduled { background: #e0f2fe; color: #0369a1; }
+        .badge-published { background: #dcfce7; color: #15803d; }
+        .badge-failed { background: #fee2e2; color: #b91c1c; }
+        .badge-draft { background: #f1f5f9; color: #475569; }
+
+        @media (max-width: 992px) {
+            .app-sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
+            }
+            .app-sidebar.show {
+                margin-left: 0;
+            }
+            .app-main {
+                margin-left: 0;
+            }
+            .app-topbar {
+                padding: 0 16px;
+            }
+            .content-container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="app-sidebar" id="appSidebar">
+        <a href="./index.html" class="sidebar-brand">
+            <i class="bi bi-calendar-range-fill text-warning"></i>
+            <div><span>IG</span> Scheduler</div>
+        </a>
+
+        <ul class="sidebar-menu">
+            <li class="menu-header">Main Menu</li>
+            <li>
+                <a href="./dashboard.html" class="sidebar-link active">
+                    <i class="bi bi-grid-1x2-fill"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="./calendar.html" class="sidebar-link">
+                    <i class="bi bi-calendar3"></i> Content Calendar
+                </a>
+            </li>
+
+            <li class="menu-header">Content Engine</li>
+            <li>
+                <a href="./schedule.html" class="sidebar-link">
+                    <i class="bi bi-lightning-charge-fill text-warning"></i> 90-Day / 1-Year Scheduler
+                </a>
+            </li>
+            <li>
+                <a href="./upload.html" class="sidebar-link">
+                    <i class="bi bi-cloud-arrow-up-fill"></i> Bulk Image Upload
+                </a>
+            </li>
+            <li>
+                <a href="./posts.html" class="sidebar-link">
+                    <i class="bi bi-collection-play-fill"></i> All Scheduled Posts
+                </a>
+            </li>
+            <li>
+                <a href="./schedules.html" class="sidebar-link">
+                    <i class="bi bi-clock-history"></i> My Schedules
+                </a>
+            </li>
+
+            <li class="menu-header">Account & Meta</li>
+            <li>
+                <a href="./instagram.html" class="sidebar-link">
+                    <i class="bi bi-instagram text-danger"></i> Instagram Accounts
+                </a>
+            </li>
+            <li>
+                <a href="./settings.html" class="sidebar-link">
+                    <i class="bi bi-gear-fill"></i> Settings & Profile
+                </a>
+            </li>
+
+            <li class="menu-header">Navigation</li>
+            <li>
+                <a href="./index.html" class="sidebar-link">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Homepage
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="app-main">
+        <!-- TOPBAR -->
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light d-lg-none" type="button" onclick="document.getElementById('appSidebar').classList.toggle('show')">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <h5 class="m-0 fw-bold">Instagram 90-Day & 365-Day Dashboard</h5>
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill d-none d-md-inline-block">
+                    <i class="bi bi-check-circle-fill me-1"></i> Live Interactive Demo
+                </span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <!-- Notifications Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="position-relative text-dark fs-5 p-2 text-decoration-none" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
+                            3
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-3" style="width: 320px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                            <span class="fw-bold">Notifications</span>
+                            <span class="badge bg-primary-subtle text-primary">3 New</span>
+                        </div>
+                        <li class="mb-2 pb-2 border-bottom">
+                            <div class="fw-bold text-success" style="font-size: 13px;"><i class="bi bi-check-circle me-1"></i> Post Published Successfully</div>
+                            <div class="text-muted" style="font-size: 12px;">"New Summer Collection Drop" went live on Instagram.</div>
+                            <small class="text-secondary" style="font-size: 10px;">12 minutes ago</small>
+                        </li>
+                        <li class="mb-2 pb-2 border-bottom">
+                            <div class="fw-bold text-primary" style="font-size: 13px;"><i class="bi bi-calendar-event me-1"></i> 90-Day Queue Active</div>
+                            <div class="text-muted" style="font-size: 12px;">Next post scheduled for tomorrow at 10:00 AM.</div>
+                            <small class="text-secondary" style="font-size: 10px;">2 hours ago</small>
+                        </li>
+                        <li class="mb-2">
+                            <div class="fw-bold" style="font-size: 13px;"><i class="bi bi-cloud-check me-1"></i> Media Synced</div>
+                            <div class="text-muted" style="font-size: 12px;">48 content assets ready in library.</div>
+                            <small class="text-secondary" style="font-size: 10px;">5 hours ago</small>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center gap-2 text-decoration-none text-dark" data-bs-toggle="dropdown">
+                        <div class="user-avatar">
+                            B
+                        </div>
+                        <div class="d-none d-md-block text-start">
+                            <div class="fw-bold lh-1" style="font-size: 14px;">biz499_demo</div>
+                            <small class="text-muted" style="font-size: 12px;">demo@biz499.com</small>
+                        </div>
+                        <i class="bi bi-chevron-down text-muted ms-1" style="font-size: 12px;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                        <li><a class="dropdown-item py-2" href="./settings.html"><i class="bi bi-person me-2"></i> Settings & Profile</a></li>
+                        <li><a class="dropdown-item py-2" href="./instagram.html"><i class="bi bi-instagram me-2"></i> Instagram Accounts</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2 text-danger" href="./login.html"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT CONTAINER -->
+        <main class="content-container">
+
+            <!-- QUICK ACTIONS BAR -->
+            <div class="card-custom p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <h5 class="fw-bold m-0"><i class="bi bi-rocket-takeoff-fill text-warning me-2"></i> Quick Actions</h5>
+                        <small class="text-muted">Manage your 90-Day / 365-Day Instagram publishing pipeline</small>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="./schedule.html" class="btn btn-dark fw-bold px-3 py-2 rounded-3">
+                            <i class="bi bi-calendar-plus-fill text-warning me-1"></i> Create Schedule
+                        </a>
+                        <a href="./upload.html" class="btn btn-outline-dark fw-bold px-3 py-2 rounded-3">
+                            <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload Images
+                        </a>
+                        <a href="./instagram.html" class="btn btn-outline-danger fw-bold px-3 py-2 rounded-3">
+                            <i class="bi bi-instagram me-1"></i> Connect Instagram
+                        </a>
+                        <a href="./calendar.html" class="btn btn-outline-primary fw-bold px-3 py-2 rounded-3">
+                            <i class="bi bi-calendar3 me-1"></i> View Calendar
+                        </a>
+                        <a href="./posts.html" class="btn btn-outline-secondary fw-bold px-3 py-2 rounded-3">
+                            <i class="bi bi-collection-play me-1"></i> View All Posts
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATS GRID -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-4 col-xl">
+                    <div class="card-custom p-3 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold" style="font-size: 13px;">Total Posts</span>
+                            <div class="p-2 bg-primary-subtle text-primary rounded-3"><i class="bi bi-layers-fill fs-5"></i></div>
+                        </div>
+                        <h2 class="fw-bold m-0">365</h2>
+                        <small class="text-muted" style="font-size: 11px;">In system pipeline</small>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-xl">
+                    <div class="card-custom p-3 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold" style="font-size: 13px;">Scheduled</span>
+                            <div class="p-2 bg-info-subtle text-info rounded-3"><i class="bi bi-clock-history fs-5"></i></div>
+                        </div>
+                        <h2 class="fw-bold m-0 text-info">237</h2>
+                        <small class="text-muted" style="font-size: 11px;">Pending release</small>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-xl">
+                    <div class="card-custom p-3 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold" style="font-size: 13px;">Published</span>
+                            <div class="p-2 bg-success-subtle text-success rounded-3"><i class="bi bi-check-circle-fill fs-5"></i></div>
+                        </div>
+                        <h2 class="fw-bold m-0 text-success">128</h2>
+                        <small class="text-muted" style="font-size: 11px;">Live on Instagram</small>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-xl">
+                    <div class="card-custom p-3 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold" style="font-size: 13px;">Failed</span>
+                            <div class="p-2 bg-danger-subtle text-danger rounded-3"><i class="bi bi-exclamation-triangle-fill fs-5"></i></div>
+                        </div>
+                        <h2 class="fw-bold m-0 text-danger">0</h2>
+                        <small class="text-muted" style="font-size: 11px;">All clear (0 errors)</small>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-xl">
+                    <div class="card-custom p-3 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold" style="font-size: 13px;">Remaining</span>
+                            <div class="p-2 bg-warning-subtle text-warning rounded-3"><i class="bi bi-hourglass-split fs-5"></i></div>
+                        </div>
+                        <h2 class="fw-bold m-0 text-warning">237</h2>
+                        <small class="text-muted" style="font-size: 11px;">Queued for release</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECONDARY STATS -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card-custom p-3">
+                        <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Total Library Images</div>
+                        <h3 class="fw-bold m-0"><i class="bi bi-images text-primary me-2"></i>48 Images</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-custom p-3">
+                        <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Connected IG Account</div>
+                        <h3 class="fw-bold m-0 text-success" style="font-size: 18px;">
+                            <i class="bi bi-patch-check-fill me-1"></i> @biz499_official
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-custom p-3">
+                        <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Posts This Month</div>
+                        <h3 class="fw-bold m-0"><i class="bi bi-calendar-month text-info me-2"></i>30 Posts</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-custom p-3">
+                        <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Active Campaign Plan</div>
+                        <h3 class="fw-bold m-0 text-warning"><i class="bi bi-calendar-check text-warning me-2"></i>90-365 Days</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN TABLES SECTION -->
+            <div class="row g-4">
+                <!-- Upcoming Scheduled Posts -->
+                <div class="col-lg-8">
+                    <div class="card-custom p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold m-0"><i class="bi bi-clock-fill text-primary me-2"></i> Upcoming Scheduled Posts</h5>
+                            <a href="./posts.html" class="btn btn-sm btn-link text-decoration-none fw-bold">View All Posts &rarr;</a>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Schedule Date</th>
+                                        <th>Caption Preview</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <img src="./static/images/sample/post1.jpg" width="48" height="48" class="rounded-3 shadow-sm" style="object-fit: cover;">
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold" style="font-size: 14px;">Tomorrow</div>
+                                            <small class="text-muted" style="font-size: 12px;">10:00 AM</small>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate" style="max-width: 260px;">
+                                                New Collection is here ✨ Fresh styles for everyone.
+                                            </div>
+                                            <small class="text-primary">#fashion #summer #style #biz499</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-scheduled px-3 py-2 rounded-pill">Scheduled</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="showPostModal('Spring Collection Launch', './static/images/sample/post1.jpg', 'Tomorrow at 10:00 AM', 'New Collection is here ✨ Fresh styles for everyone.', '#fashion #summer #style #biz499', 'Scheduled')">
+                                                <i class="bi bi-eye-fill"></i> Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="./static/images/sample/post2.jpg" width="48" height="48" class="rounded-3 shadow-sm" style="object-fit: cover;">
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold" style="font-size: 14px;">In 2 Days</div>
+                                            <small class="text-muted" style="font-size: 12px;">02:30 PM</small>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate" style="max-width: 260px;">
+                                                Minimal aesthetic, maximum impact 📸 Check out our story.
+                                            </div>
+                                            <small class="text-primary">#minimalism #aesthetic #creative</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-scheduled px-3 py-2 rounded-pill">Scheduled</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="showPostModal('Minimal Aesthetic', './static/images/sample/post2.jpg', 'In 2 Days at 02:30 PM', 'Minimal aesthetic, maximum impact 📸 Check out our story.', '#minimalism #aesthetic #creative', 'Scheduled')">
+                                                <i class="bi bi-eye-fill"></i> Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="./static/images/sample/post3.jpg" width="48" height="48" class="rounded-3 shadow-sm" style="object-fit: cover;">
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold" style="font-size: 14px;">In 3 Days</div>
+                                            <small class="text-muted" style="font-size: 12px;">06:00 PM</small>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate" style="max-width: 260px;">
+                                                Behind the scenes of our creative studio 🎬 Building magic!
+                                            </div>
+                                            <small class="text-primary">#bts #behindthescenes #production</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-scheduled px-3 py-2 rounded-pill">Scheduled</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="showPostModal('Studio BTS', './static/images/sample/post3.jpg', 'In 3 Days at 06:00 PM', 'Behind the scenes of our creative studio 🎬 Building magic!', '#bts #behindthescenes #production', 'Scheduled')">
+                                                <i class="bi bi-eye-fill"></i> Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="./static/images/sample/post4.jpg" width="48" height="48" class="rounded-3 shadow-sm" style="object-fit: cover;">
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold" style="font-size: 14px;">Yesterday</div>
+                                            <small class="text-muted" style="font-size: 12px;">10:00 AM</small>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate" style="max-width: 260px;">
+                                                Weekend vibes & special announcements are live! 🎉
+                                            </div>
+                                            <small class="text-primary">#weekend #vibes #announcement</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-published px-3 py-2 rounded-pill">Published</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="showPostModal('Weekend Vibes', './static/images/sample/post4.jpg', 'Yesterday at 10:00 AM', 'Weekend vibes & special announcements are live! 🎉', '#weekend #vibes #announcement', 'Published')">
+                                                <i class="bi bi-eye-fill"></i> Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar / Next Scheduled Post Widget -->
+                <div class="col-lg-4">
+                    <div class="card-custom p-4 mb-4 bg-dark text-white">
+                        <h6 class="fw-bold text-warning mb-3"><i class="bi bi-lightning-fill"></i> NEXT SCHEDULED POST</h6>
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <img src="./static/images/sample/post1.jpg" width="70" height="70" class="rounded-3 border border-secondary" style="object-fit: cover;">
+                            <div>
+                                <h6 class="fw-bold text-white mb-1">Tomorrow @ 10:00 AM</h6>
+                                <span class="badge bg-warning text-dark font-monospace">14h 22m left</span>
+                            </div>
+                        </div>
+                        <p class="text-light small mb-3" style="font-size: 13px;">
+                            "New Collection is here ✨ Fresh styles for everyone..."
+                        </p>
+                        <button class="btn btn-sm btn-light w-100 fw-bold rounded-2" onclick="showPostModal('Spring Collection Launch', './static/images/sample/post1.jpg', 'Tomorrow at 10:00 AM', 'New Collection is here ✨ Fresh styles for everyone.', '#fashion #summer #style #biz499', 'Scheduled')">
+                            Manage Next Post
+                        </button>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <h6 class="fw-bold mb-3"><i class="bi bi-info-circle-fill text-primary"></i> Instagram API Status</h6>
+                        <div class="alert alert-success border-0 py-2 small mb-2">
+                            <i class="bi bi-check-circle-fill me-1"></i> Connected to @biz499_official
+                        </div>
+                        <p class="text-muted small mb-3">Meta Graph API credentials verified. 365-day auto posting queue is actively listening for scheduled time triggers.</p>
+                        <a href="./instagram.html" class="btn btn-sm btn-outline-dark w-100 fw-bold">Manage Meta Connection</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- POST DETAILS MODAL -->
+    <div class="modal fade" id="postModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Post Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img id="modalImage" src="" class="img-fluid rounded-3 shadow-sm" style="max-height: 240px; object-fit: cover;">
+                    </div>
+                    <div class="mb-2">
+                        <span id="modalStatusBadge" class="badge bg-primary px-3 py-2 rounded-pill">Status</span>
+                    </div>
+                    <p class="fw-bold mb-1" id="modalTime" style="font-size: 14px;"></p>
+                    <p id="modalCaption" class="text-dark bg-light p-3 rounded-3" style="font-size: 14px;"></p>
+                    <p id="modalHashtags" class="text-primary small mb-0"></p>
+                </div>
+                <div class="modal-footer border-top">
+                    <a href="./posts.html" class="btn btn-dark fw-bold rounded-2">Edit in All Posts</a>
+                    <button type="button" class="btn btn-secondary fw-bold rounded-2" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showPostModal(title, imageSrc, time, caption, hashtags, status) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('modalTime').innerText = "Scheduled for: " + time;
+            document.getElementById('modalCaption').innerText = caption;
+            document.getElementById('modalHashtags').innerText = hashtags;
+            document.getElementById('modalStatusBadge').innerText = status;
+            if (status === 'Published') {
+                document.getElementById('modalStatusBadge').className = 'badge bg-success px-3 py-2 rounded-pill';
+            } else {
+                document.getElementById('modalStatusBadge').className = 'badge bg-primary px-3 py-2 rounded-pill';
+            }
+            var modal = new bootstrap.Modal(document.getElementById('postModal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Image Upload & Media Library - IG Scheduler</title>
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --primary-gradient: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            --dark-bg: #111827;
+            --dark-card: #1f2937;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        .app-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--dark-bg);
+            color: #94a3b8;
+            z-index: 1030;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 24px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .sidebar-brand span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-menu {
+            padding: 16px 12px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .menu-header {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+            padding: 16px 12px 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: var(--dark-card);
+            color: #ffffff;
+        }
+
+        .sidebar-link.active i {
+            color: #ec4899;
+        }
+
+        .app-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .app-topbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .content-container {
+            padding: 32px;
+            flex: 1;
+        }
+
+        .card-custom {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 35px 20px;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone.dragover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        @media (max-width: 992px) {
+            .app-sidebar { margin-left: calc(-1 * var(--sidebar-width)); }
+            .app-sidebar.show { margin-left: 0; }
+            .app-main { margin-left: 0; }
+            .app-topbar { padding: 0 16px; }
+            .content-container { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="app-sidebar" id="appSidebar">
+        <a href="./index.html" class="sidebar-brand">
+            <i class="bi bi-calendar-range-fill text-warning"></i>
+            <div><span>IG</span> Scheduler</div>
+        </a>
+
+        <ul class="sidebar-menu">
+            <li class="menu-header">Main Menu</li>
+            <li>
+                <a href="./dashboard.html" class="sidebar-link">
+                    <i class="bi bi-grid-1x2-fill"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="./calendar.html" class="sidebar-link">
+                    <i class="bi bi-calendar3"></i> Content Calendar
+                </a>
+            </li>
+
+            <li class="menu-header">Content Engine</li>
+            <li>
+                <a href="./schedule.html" class="sidebar-link">
+                    <i class="bi bi-lightning-charge-fill text-warning"></i> 90-Day / 1-Year Scheduler
+                </a>
+            </li>
+            <li>
+                <a href="./upload.html" class="sidebar-link active">
+                    <i class="bi bi-cloud-arrow-up-fill"></i> Bulk Image Upload
+                </a>
+            </li>
+            <li>
+                <a href="./posts.html" class="sidebar-link">
+                    <i class="bi bi-collection-play-fill"></i> All Scheduled Posts
+                </a>
+            </li>
+            <li>
+                <a href="./schedules.html" class="sidebar-link">
+                    <i class="bi bi-clock-history"></i> My Schedules
+                </a>
+            </li>
+
+            <li class="menu-header">Account & Meta</li>
+            <li>
+                <a href="./instagram.html" class="sidebar-link">
+                    <i class="bi bi-instagram text-danger"></i> Instagram Accounts
+                </a>
+            </li>
+            <li>
+                <a href="./settings.html" class="sidebar-link">
+                    <i class="bi bi-gear-fill"></i> Settings & Profile
+                </a>
+            </li>
+
+            <li class="menu-header">Navigation</li>
+            <li>
+                <a href="./index.html" class="sidebar-link">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Homepage
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTAINER -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light d-lg-none" type="button" onclick="document.getElementById('appSidebar').classList.toggle('show')">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <h5 class="m-0 fw-bold">Bulk Content Library & Image Upload</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <a href="./schedule.html" class="btn btn-dark fw-bold btn-sm rounded-3">
+                    Use in 90-Day Schedule &rarr;
+                </a>
+                <div class="user-avatar">B</div>
+            </div>
+        </header>
+
+        <main class="content-container">
+            <!-- Alert Banner -->
+            <div id="uploadAlert" class="alert alert-success alert-dismissible fade d-none mb-4 rounded-3" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> Images successfully uploaded and saved to your Content Library!
+                <button type="button" class="btn-close" onclick="this.parentElement.classList.add('d-none')"></button>
+            </div>
+
+            <div class="row g-4">
+                <!-- UPLOAD CARD -->
+                <div class="col-lg-5">
+                    <div class="card-custom p-4">
+                        <h5 class="fw-bold mb-2"><i class="bi bi-cloud-arrow-up-fill text-primary me-2"></i> Upload Images</h5>
+                        <p class="text-muted small mb-4">Select or drag & drop photos into your content library for 90-day and 365-day schedule generation.</p>
+
+                        <div class="drop-zone mb-3" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                            <i class="bi bi-images display-4 text-secondary mb-2 d-block"></i>
+                            <h6 class="fw-bold m-0">Drag & Drop Images Here</h6>
+                            <small class="text-muted d-block my-2">or click to browse from device</small>
+                            <input type="file" id="fileInput" multiple accept="image/*" class="d-none">
+                            <small class="text-secondary d-block mt-2" style="font-size: 11px;">Supported: JPG, JPEG, PNG, WEBP (Max 10MB per file)</small>
+                        </div>
+
+                        <!-- Selected Preview Container -->
+                        <div id="filePreviewContainer" class="d-flex flex-wrap gap-2 mb-3"></div>
+
+                        <button type="button" id="uploadBtn" class="btn btn-dark w-100 py-3 fw-bold rounded-3" onclick="processUpload()">
+                            <i class="bi bi-check2-circle me-1"></i> Upload Selected Images to Library
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CONTENT LIBRARY GRID -->
+                <div class="col-lg-7">
+                    <div class="card-custom p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold m-0">
+                                <i class="bi bi-grid-fill text-warning me-2"></i> Content Library (<span id="libraryCount">4</span>)
+                            </h5>
+                            <a href="./schedule.html" class="btn btn-sm btn-dark fw-bold rounded-2">
+                                Use in 90-Day Schedule &rarr;
+                            </a>
+                        </div>
+
+                        <div class="row g-3" style="max-height: 520px; overflow-y: auto;" id="libraryGrid">
+                            <div class="col-6 col-sm-4 library-item">
+                                <div class="position-relative border rounded-3 overflow-hidden shadow-sm bg-white">
+                                    <img src="./static/images/sample/post1.jpg" class="w-100" style="height: 130px; object-fit: cover;">
+                                    <div class="p-2 bg-white text-truncate small fw-semibold d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                                        <span class="text-truncate">Spring Look #1</span>
+                                        <i class="bi bi-grip-vertical text-muted"></i>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-danger p-1 rounded-circle lh-1 position-absolute top-0 end-0 m-1" onclick="this.closest('.library-item').remove(); updateCount();" title="Remove">
+                                        <i class="bi bi-x fs-6"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 library-item">
+                                <div class="position-relative border rounded-3 overflow-hidden shadow-sm bg-white">
+                                    <img src="./static/images/sample/post2.jpg" class="w-100" style="height: 130px; object-fit: cover;">
+                                    <div class="p-2 bg-white text-truncate small fw-semibold d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                                        <span class="text-truncate">Minimal Shoot #2</span>
+                                        <i class="bi bi-grip-vertical text-muted"></i>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-danger p-1 rounded-circle lh-1 position-absolute top-0 end-0 m-1" onclick="this.closest('.library-item').remove(); updateCount();" title="Remove">
+                                        <i class="bi bi-x fs-6"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 library-item">
+                                <div class="position-relative border rounded-3 overflow-hidden shadow-sm bg-white">
+                                    <img src="./static/images/sample/post3.jpg" class="w-100" style="height: 130px; object-fit: cover;">
+                                    <div class="p-2 bg-white text-truncate small fw-semibold d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                                        <span class="text-truncate">Studio BTS #3</span>
+                                        <i class="bi bi-grip-vertical text-muted"></i>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-danger p-1 rounded-circle lh-1 position-absolute top-0 end-0 m-1" onclick="this.closest('.library-item').remove(); updateCount();" title="Remove">
+                                        <i class="bi bi-x fs-6"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 library-item">
+                                <div class="position-relative border rounded-3 overflow-hidden shadow-sm bg-white">
+                                    <img src="./static/images/sample/post4.jpg" class="w-100" style="height: 130px; object-fit: cover;">
+                                    <div class="p-2 bg-white text-truncate small fw-semibold d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                                        <span class="text-truncate">Weekend Vibes #4</span>
+                                        <i class="bi bi-grip-vertical text-muted"></i>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-danger p-1 rounded-circle lh-1 position-absolute top-0 end-0 m-1" onclick="this.closest('.library-item').remove(); updateCount();" title="Remove">
+                                        <i class="bi bi-x fs-6"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('filePreviewContainer');
+        const libraryGrid = document.getElementById('libraryGrid');
+        let selectedFiles = [];
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                handleFiles(fileInput.files);
+            }
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    selectedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'position-relative d-inline-block';
+                        wrapper.innerHTML = `
+                            <img src="${e.target.result}" class="rounded-2 border shadow-sm" style="width:65px; height:65px; object-fit:cover;">
+                        `;
+                        previewContainer.appendChild(wrapper);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function processUpload() {
+            if (selectedFiles.length === 0) {
+                alert('Please select or drop at least one image first!');
+                return;
+            }
+
+            selectedFiles.forEach((file, i) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const col = document.createElement('div');
+                    col.className = 'col-6 col-sm-4 library-item';
+                    col.innerHTML = `
+                        <div class="position-relative border rounded-3 overflow-hidden shadow-sm bg-white">
+                            <img src="${e.target.result}" class="w-100" style="height: 130px; object-fit: cover;">
+                            <div class="p-2 bg-white text-truncate small fw-semibold d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                                <span class="text-truncate">${file.name}</span>
+                                <i class="bi bi-grip-vertical text-muted"></i>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger p-1 rounded-circle lh-1 position-absolute top-0 end-0 m-1" onclick="this.closest('.library-item').remove(); updateCount();" title="Remove">
+                                <i class="bi bi-x fs-6"></i>
+                            </button>
+                        </div>
+                    `;
+                    libraryGrid.prepend(col);
+                    updateCount();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            selectedFiles = [];
+            previewContainer.innerHTML = '';
+            fileInput.value = '';
+            const alertBox = document.getElementById('uploadAlert');
+            alertBox.classList.remove('d-none');
+            alertBox.classList.add('show');
+            setTimeout(() => { alertBox.classList.add('d-none'); }, 4000);
+        }
+
+        function updateCount() {
+            const count = libraryGrid.querySelectorAll('.library-item').length;
+            document.getElementById('libraryCount').innerText = count;
+        }
+    </script>
+</body>
+</html>
