@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>biz499 | Instagram 365-Day Auto Posting</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        :root {
+            --pink: #f65bb8;
+            --orange: #ff9d61;
+            --yellow: #ffd36a;
+            --purple: #a855f7;
+            --dark: #171923;
+            --text: #242631;
+            --muted: #727785;
+            --light: #fff8fc;
+            --border: #ececf2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            color: var(--text);
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            padding: 18px 0;
+            background: rgba(255,255,255,.88);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #171923;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+
+        /* =========================
+           REAL BIZ499 LOGO
+        ========================= */
+        .biz499-logo {
+            width: 145px;
+            height: auto;
+            max-height: 48px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .footer-logo {
+            width: 155px;
+            height: auto;
+            max-height: 55px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff6ec7,
+                    #ff9c68,
+                    #ffd36b
+                );
+
+            box-shadow:
+                0 8px 20px rgba(246,91,184,.25);
+        }
+
+        .nav-link {
+            color: #545864 !important;
+            font-weight: 600;
+            margin: 0 11px;
+            transition: .25s;
+        }
+
+        .nav-link:hover {
+            color: var(--pink) !important;
+        }
+
+        .login-btn {
+            color: #252733;
+            font-weight: 700;
+            margin-right: 16px;
+        }
+
+        .start-btn {
+            color: white;
+            padding: 11px 21px;
+            border-radius: 11px;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f75eb9,
+                    #ff9d62
+                );
+
+            box-shadow:
+                0 10px 25px rgba(246,91,184,.20);
+
+            transition: .25s;
+        }
+
+        .start-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow:
+                0 14px 30px rgba(246,91,184,.28);
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            position: relative;
+            padding: 100px 0 85px;
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 5% 20%,
+                    rgba(255,183,220,.35),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 95% 20%,
+                    rgba(255,211,145,.30),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    180deg,
+                    #ffffff 0%,
+                    #fff9fc 100%
+                );
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            right: -100px;
+            top: 50px;
+            background: rgba(255,196,221,.20);
+            filter: blur(30px);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 9px 16px;
+            border-radius: 50px;
+
+            background: rgba(255,255,255,.75);
+            border: 1px solid #f1dce8;
+
+            color: #d64a9f;
+            font-size: 13px;
+            font-weight: 700;
+
+            box-shadow: 0 8px 25px rgba(0,0,0,.04);
+
+            margin-bottom: 23px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            font-weight: 800;
+            max-width: 650px;
+        }
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    90deg,
+                    #f254b5,
+                    #ff9662,
+                    #ffc85f
+                );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            margin-top: 24px;
+            max-width: 610px;
+
+            color: var(--muted);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            margin-top: 32px;
+        }
+
+        .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 15px 25px;
+            border-radius: 12px;
+
+            color: white;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f254b5,
+                    #ff9d61
+                );
+
+            box-shadow:
+                0 15px 35px rgba(246,91,184,.22);
+
+            transition: .25s;
+        }
+
+        .primary-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow:
+                0 20px 40px rgba(246,91,184,.30);
+        }
+
+        .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 14px 23px;
+            margin-left: 8px;
+
+            border: 1px solid #dedfe5;
+            border-radius: 12px;
+
+            color: #252733;
+            background: white;
+            font-weight: 700;
+
+            transition: .25s;
+        }
+
+        .secondary-btn:hover {
+            color: #252733;
+            border-color: #f2a5cf;
+            transform: translateY(-2px);
+        }
+
+        .hero-checks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+
+            margin-top: 28px;
+
+            color: #6f7480;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .hero-checks i {
+            color: #36b77a;
+            margin-right: 5px;
+        }
+
+        /* =========================
+           DASHBOARD PREVIEW
+        ========================= */
+
+        .dashboard-window {
+            position: relative;
+
+            padding: 10px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.95),
+                    rgba(255,240,248,.90)
+                );
+
+            border: 1px solid rgba(245,184,215,.5);
+
+            box-shadow:
+                0 35px 90px rgba(31,26,39,.13);
+        }
+
+        .window-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 12px 15px;
+        }
+
+        .window-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #f4b4d3;
+        }
+
+        .window-content {
+            display: flex;
+            min-height: 460px;
+
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .preview-sidebar {
+            width: 150px;
+            padding: 22px 13px;
+
+            background: #fffafe;
+            border-right: 1px solid #f0e9ee;
+        }
+
+        .preview-brand {
+            font-weight: 800;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .preview-menu {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 9px 10px;
+            margin-bottom: 7px;
+
+            border-radius: 9px;
+
+            font-size: 11px;
+            font-weight: 600;
+            color: #858895;
+        }
+
+        .preview-menu.active {
+            color: #df4da4;
+            background: #fff0f8;
+        }
+
+        .preview-main {
+            flex: 1;
+            padding: 24px;
+            background: #ffffff;
+        }
+
+        .preview-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .preview-heading h5 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .preview-create {
+            padding: 8px 12px;
+            border-radius: 8px;
+
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f25ab7,
+                    #ff9b60
+                );
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 10px;
+            margin-bottom: 17px;
+        }
+
+        .mini-stat {
+            padding: 14px;
+            border-radius: 12px;
+
+            border: 1px solid #f0edf0;
+            background: #fff;
+        }
+
+        .mini-stat small {
+            color: #8a8e98;
+            font-size: 9px;
+        }
+
+        .mini-stat strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 21px;
+        }
+
+        .preview-section-title {
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .preview-post {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 11px;
+            margin-bottom: 8px;
+
+            border: 1px solid #efedf0;
+            border-radius: 11px;
+        }
+
+        .post-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-thumb {
+            width: 37px;
+            height: 37px;
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f3b1d5,
+                    #ffc778
+                );
+        }
+
+        .post-title {
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .post-date {
+            font-size: 8px;
+            color: #8d9099;
+            margin-top: 3px;
+        }
+
+        .scheduled-badge {
+            padding: 5px 8px;
+            border-radius: 20px;
+
+            background: #e7f8ee;
+            color: #28a463;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           TRUST
+        ========================= */
+
+        .trust-section {
+            padding: 35px 0;
+            border-top: 1px solid #f3edf1;
+            border-bottom: 1px solid #f3edf1;
+            background: white;
+        }
+
+        .trust-title {
+            text-align: center;
+            color: #9a9da5;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .trust-items {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 70px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            color: #a1a3aa;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-soft {
+            background: #fffafd;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 55px;
+        }
+
+        .section-title span {
+            color: #e454a8;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title h2 {
+            margin-top: 9px;
+
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .section-title p {
+            max-width: 650px;
+            margin: 14px auto 0;
+
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           FEATURES
+        ========================= */
+
+        .feature-card {
+            height: 100%;
+            padding: 30px;
+
+            border: 1px solid #eeeaf0;
+            border-radius: 20px;
+
+            background: white;
+
+            transition: .3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-7px);
+
+            box-shadow:
+                0 25px 60px rgba(38,25,38,.08);
+
+            border-color: #f4c6df;
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            color: #e54da5;
+            background: #fff0f8;
+
+            font-size: 22px;
+
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #777b86;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        /* =========================
+           HOW IT WORKS
+        ========================= */
+
+        .step {
+            position: relative;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .step-number {
+            width: 58px;
+            height: 58px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+            font-size: 19px;
+            font-weight: 800;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f25ab7,
+                    #ff9d60
+                );
+
+            box-shadow:
+                0 12px 25px rgba(242,90,183,.20);
+        }
+
+        .step h4 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .step p {
+            color: #777b86;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           PRICING
+        ========================= */
+
+        .pricing-card {
+            max-width: 450px;
+            margin: auto;
+
+            padding: 38px;
+
+            border-radius: 24px;
+            border: 1px solid #f0dce7;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff,
+                    #fff8fc
+                );
+
+            box-shadow:
+                0 25px 70px rgba(41,25,37,.08);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+
+            padding: 7px 13px;
+            border-radius: 30px;
+
+            color: #d74799;
+            background: #fff0f8;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        .price small {
+            font-size: 14px;
+            color: #858993;
+            letter-spacing: 0;
+        }
+
+        .pricing-list {
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+
+        .pricing-list li {
+            margin-bottom: 13px;
+            color: #686d78;
+            font-size: 13px;
+        }
+
+        .pricing-list i {
+            color: #32ad71;
+            margin-right: 7px;
+        }
+
+        /* =========================
+           CTA
+        ========================= */
+
+        .cta {
+            padding: 80px 0;
+        }
+
+        .cta-box {
+            position: relative;
+            overflow: hidden;
+
+            padding: 75px 35px;
+
+            border-radius: 30px;
+
+            text-align: center;
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 20% 10%,
+                    rgba(255,255,255,.15),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #222331,
+                    #171923
+                );
+
+            box-shadow:
+                0 30px 80px rgba(20,20,30,.15);
+        }
+
+        .cta-box h2 {
+            max-width: 760px;
+            margin: auto;
+
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .cta-box p {
+            max-width: 600px;
+            margin: 18px auto 30px;
+
+            color: #c9cad0;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 14px 25px;
+
+            border-radius: 12px;
+
+            color: #20212b;
+            background: white;
+
+            font-weight: 800;
+
+            transition: .25s;
+        }
+
+        .cta-btn:hover {
+            color: #20212b;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #fffafd;
+            border-top: 1px solid #eee7ed;
+        }
+
+        .footer-main {
+            padding: 65px 0 45px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            font-size: 25px;
+            font-weight: 800;
+            color: #252631;
+        }
+
+        .footer-description {
+            max-width: 280px;
+            margin-top: 15px;
+
+            color: #858995;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 11px;
+        }
+
+        .footer-links a {
+            color: #7b7f8a;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .footer-links a:hover {
+            color: #e34fa5;
+        }
+
+        .socials {
+            display: flex;
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .social {
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            color: #777b85;
+            background: white;
+            border: 1px solid #ece7ec;
+
+            transition: .2s;
+        }
+
+        .social:hover {
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f25ab7,
+                    #ff9b60
+                );
+
+            border-color: transparent;
+        }
+
+        .footer-bottom {
+            padding: 20px 0;
+
+            border-top: 1px solid #eee7ed;
+
+            color: #9699a2;
+            font-size: 12px;
+        }
+
+        .reserved {
+            color: #e353a7;
+            font-weight: 800;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width: 992px) {
+
+            .hero {
+                padding-top: 65px;
+            }
+
+            .hero h1 {
+                font-size: 45px;
+            }
+
+            .dashboard-window {
+                margin-top: 45px;
+            }
+
+            .trust-items {
+                gap: 30px;
+            }
+
+        }
+
+        @media(max-width: 768px) {
+
+            .hero h1 {
+                font-size: 40px;
+                letter-spacing: -1px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .hero-checks {
+                gap: 10px;
+            }
+
+            .window-content {
+                min-height: 400px;
+            }
+
+            .preview-sidebar {
+                display: none;
+            }
+
+            .preview-main {
+                padding: 15px;
+            }
+
+            .section {
+                padding: 75px 0;
+            }
+
+            .section-title h2 {
+                font-size: 32px;
+            }
+
+            .cta-box h2 {
+                font-size: 30px;
+            }
+
+        }
+
+        @media(max-width: 576px) {
+
+            .biz499-logo {
+                width: 120px;
+            }
+
+            .footer-logo {
+                width: 135px;
+            }
+
+            .hero-buttons a {
+                width: 100%;
+                justify-content: center;
+                margin: 5px 0;
+            }
+
+            .secondary-btn {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-items {
+                gap: 20px;
+            }
+
+            .trust-item {
+                font-size: 16px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<nav class="navbar navbar-expand-lg sticky-top">
+
+    <div class="container">
+
+        <a href="{% url 'home' %}" class="brand">
+            <img src="{% static 'images/biz499-logo.png' %}"
+                 alt="biz499"
+                 class="biz499-logo">
+        </a>
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMenu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav mx-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#features">
+                        Features
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#how-it-works">
+                        How It Works
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#pricing">
+                        Pricing
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#faq">
+                        FAQ
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <div>
+
+                {% if user.is_authenticated %}
+
+                    <a
+                        href="{% url 'dashboard' %}"
+                        class="start-btn"
+                    >
+                        Dashboard
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'login' %}"
+                        class="login-btn"
+                    >
+                        Login
+                    </a>
+
+                    <a
+                        href="{% url 'signup' %}"
+                        class="start-btn"
+                    >
+                        Get Started
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ==========================================
+     HERO
+========================================== -->
+
+<section class="hero">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <span class="hero-badge">
+
+                    <i class="bi bi-stars"></i>
+
+                    Automate. Schedule. Grow.
+
+                </span>
+
+
+                <h1>
+
+                    Automate Your Instagram Posts For
+
+                    <span class="gradient-text">
+                        1 Full Year
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Plan, schedule and automatically publish
+                    Instagram posts for 365 days. Upload your
+                    images, add captions and hashtags, and let
+                    your content run automatically.
+
+                </p>
+
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="{% url 'signup' %}"
+                        class="primary-btn"
+                    >
+
+                        Get Started Free
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+
+                    <a
+                        href="#how-it-works"
+                        class="secondary-btn"
+                    >
+
+                        <i class="bi bi-play-circle"></i>
+
+                        See How It Works
+
+                    </a>
+
+                </div>
+
+
+                <div class="hero-checks">
+
+                    <span>
+                        <i class="bi bi-check-circle-fill"></i>
+                        365 Days Scheduling
+                    </span>
+
+                    <span>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Auto Posting
+                    </span>
+
+                    <span>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Secure & Reliable
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD PREVIEW -->
+
+            <div class="col-lg-6">
+
+                <div class="dashboard-window">
+
+                    <div class="window-bar">
+
+                        <span class="window-dot"></span>
+                        <span class="window-dot"></span>
+                        <span class="window-dot"></span>
+
+                    </div>
+
+
+                    <div class="window-content">
+
+
+                        <!-- SIDEBAR -->
+
+                        <div class="preview-sidebar">
+
+                            <div class="preview-brand">
+                                biz499
+                            </div>
+
+
+                            <div class="preview-menu active">
+                                <i class="bi bi-grid"></i>
+                                Dashboard
+                            </div>
+
+                            <div class="preview-menu">
+                                <i class="bi bi-calendar3"></i>
+                                Schedule
+                            </div>
+
+                            <div class="preview-menu">
+                                <i class="bi bi-calendar4-week"></i>
+                                Calendar
+                            </div>
+
+                            <div class="preview-menu">
+                                <i class="bi bi-images"></i>
+                                Posts
+                            </div>
+
+                            <div class="preview-menu">
+                                <i class="bi bi-folder2-open"></i>
+                                Media Library
+                            </div>
+
+                            <div class="preview-menu">
+                                <i class="bi bi-graph-up"></i>
+                                Analytics
+                            </div>
+
+                            <div class="preview-menu">
+                                <i class="bi bi-gear"></i>
+                                Settings
+                            </div>
+
+                        </div>
+
+
+                        <!-- MAIN -->
+
+                        <div class="preview-main">
+
+                            <div class="preview-heading">
+
+                                <h5>
+                                    Welcome back! 👋
+                                </h5>
+
+                                <span class="preview-create">
+                                    + Create New
+                                </span>
+
+                            </div>
+
+
+                            <div class="stats-grid">
+
+                                <div class="mini-stat">
+
+                                    <small>
+                                        Scheduled Posts
+                                    </small>
+
+                                    <strong>
+                                        365
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="mini-stat">
+
+                                    <small>
+                                        Published
+                                    </small>
+
+                                    <strong>
+                                        128
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="mini-stat">
+
+                                    <small>
+                                        Success Rate
+                                    </small>
+
+                                    <strong>
+                                        92%
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="preview-section-title">
+                                Upcoming Posts
+                            </div>
+
+
+                            <div class="preview-post">
+
+                                <div class="post-left">
+
+                                    <div class="post-thumb"></div>
+
+                                    <div>
+
+                                        <div class="post-title">
+                                            New collection is here ✨
+                                        </div>
+
+                                        <div class="post-date">
+                                            12 Aug · 10:00 AM
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <span class="scheduled-badge">
+                                    Scheduled
+                                </span>
+
+                            </div>
+
+
+                            <div class="preview-post">
+
+                                <div class="post-left">
+
+                                    <div class="post-thumb"></div>
+
+                                    <div>
+
+                                        <div class="post-title">
+                                            Minimal look, maximum impact.
+                                        </div>
+
+                                        <div class="post-date">
+                                            13 Aug · 10:00 AM
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <span class="scheduled-badge">
+                                    Scheduled
+                                </span>
+
+                            </div>
+
+
+                            <div class="preview-post">
+
+                                <div class="post-left">
+
+                                    <div class="post-thumb"></div>
+
+                                    <div>
+
+                                        <div class="post-title">
+                                            Behind the scenes ✨
+                                        </div>
+
+                                        <div class="post-date">
+                                            14 Aug · 10:00 AM
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <span class="scheduled-badge">
+                                    Scheduled
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     TRUST
+========================================== -->
+
+<section class="trust-section">
+
+    <div class="container">
+
+        <div class="trust-title">
+            Built for creators, brands and growing businesses
+        </div>
+
+
+        <div class="trust-items">
+
+            <div class="trust-item">
+                <i class="bi bi-instagram"></i>
+                Instagram
+            </div>
+
+            <div class="trust-item">
+                Creators
+            </div>
+
+            <div class="trust-item">
+                Businesses
+            </div>
+
+            <div class="trust-item">
+                Agencies
+            </div>
+
+            <div class="trust-item">
+                Brands
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     FEATURES
+========================================== -->
+
+<section
+    class="section"
+    id="features"
+>
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <span>
+                Powerful Features
+            </span>
+
+            <h2>
+                Everything You Need To Stay Consistent
+            </h2>
+
+            <p>
+                Manage your complete Instagram content
+                pipeline from one simple and powerful dashboard.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+
+                    <h4>
+                        365-Day Scheduling
+                    </h4>
+
+                    <p>
+                        Plan your Instagram content for an
+                        entire year and automatically generate
+                        your posting calendar.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </div>
+
+                    <h4>
+                        Bulk Image Upload
+                    </h4>
+
+                    <p>
+                        Upload multiple images at once and
+                        organize your entire content library
+                        in one place.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-instagram"></i>
+                    </div>
+
+                    <h4>
+                        Instagram Integration
+                    </h4>
+
+                    <p>
+                        Connect your eligible Instagram
+                        Professional account through the
+                        official Meta API.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                    <h4>
+                        Captions & Hashtags
+                    </h4>
+
+                    <p>
+                        Add default descriptions and hashtags
+                        or customize the content of individual
+                        scheduled posts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <h4>
+                        Automatic Background Posting
+                    </h4>
+
+                    <p>
+                        Celery and Redis handle scheduled
+                        background tasks so your content can
+                        be processed automatically.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <h4>
+                        Content Calendar
+                    </h4>
+
+                    <p>
+                        View your scheduled content in a
+                        clean calendar and easily manage
+                        upcoming posts.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     HOW IT WORKS
+========================================== -->
+
+<section
+    class="section section-soft"
+    id="how-it-works"
+>
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <span>
+                Simple Workflow
+            </span>
+
+            <h2>
+                How It Works
+            </h2>
+
+            <p>
+                Create an entire year of Instagram content
+                in just a few simple steps.
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+
+            <div class="col-md-4">
+
+                <div class="step">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <h4>
+                        Upload Your Images
+                    </h4>
+
+                    <p>
+                        Upload your photos and organize
+                        them inside your content library.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="step">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <h4>
+                        Create Your Schedule
+                    </h4>
+
+                    <p>
+                        Add captions, hashtags, posting time
+                        and generate your 365-day schedule.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="step">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <h4>
+                        Let It Run
+                    </h4>
+
+                    <p>
+                        Your scheduled content is processed
+                        automatically through the background
+                        scheduler.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     PRICING
+========================================== -->
+
+<section
+    class="section"
+    id="pricing"
+>
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <span>
+                Simple Pricing
+            </span>
+
+            <h2>
+                One Powerful Plan
+            </h2>
+
+            <p>
+                Everything you need to plan and manage
+                your Instagram content for a full year.
+            </p>
+
+        </div>
+
+
+        <div class="pricing-card">
+
+            <div class="text-center">
+
+                <span class="pricing-badge">
+                    365-DAY PLAN
+                </span>
+
+                <h3 class="fw-bold mt-3">
+                    Yearly Master
+                </h3>
+
+                <div class="price my-3">
+                    $29
+                    <small>/ month</small>
+                </div>
+
+                <p class="text-muted">
+                    Complete Instagram content scheduling.
+                </p>
+
+            </div>
+
+
+            <ul class="pricing-list">
+
+                <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    365-Day Content Scheduling
+                </li>
+
+                <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Bulk Image Upload
+                </li>
+
+                <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Captions & Hashtags
+                </li>
+
+                <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Content Calendar
+                </li>
+
+                <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Celery & Redis Scheduler
+                </li>
+
+                <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Instagram / Meta API Ready
+                </li>
+
+            </ul>
+
+
+            <a
+                href="{% url 'signup' %}"
+                class="primary-btn w-100 justify-content-center"
+            >
+
+                Get Started
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     FAQ
+========================================== -->
+
+<section
+    class="section section-soft"
+    id="faq"
+>
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <span>
+                FAQ
+            </span>
+
+            <h2>
+                Frequently Asked Questions
+            </h2>
+
+        </div>
+
+
+        <div
+            class="accordion col-lg-8 mx-auto"
+            id="faqAccordion"
+        >
+
+
+            <div class="accordion-item border-0 mb-3 shadow-sm rounded-4">
+
+                <h2 class="accordion-header">
+
+                    <button
+                        class="accordion-button collapsed fw-bold rounded-4"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#faqOne"
+                    >
+
+                        How does 365-day scheduling work?
+
+                    </button>
+
+                </h2>
+
+
+                <div
+                    id="faqOne"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="accordion-body text-muted">
+
+                        Upload your images, select your start date,
+                        posting time and duration. The system
+                        automatically generates your scheduled
+                        posts across the selected period.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="accordion-item border-0 mb-3 shadow-sm rounded-4">
+
+                <h2 class="accordion-header">
+
+                    <button
+                        class="accordion-button collapsed fw-bold rounded-4"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#faqTwo"
+                    >
+
+                        Can I add captions and hashtags?
+
+                    </button>
+
+                </h2>
+
+
+                <div
+                    id="faqTwo"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="accordion-body text-muted">
+
+                        Yes. You can add default descriptions and
+                        hashtags for your schedule and customize
+                        individual posts whenever needed.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="accordion-item border-0 shadow-sm rounded-4">
+
+                <h2 class="accordion-header">
+
+                    <button
+                        class="accordion-button collapsed fw-bold rounded-4"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#faqThree"
+                    >
+
+                        Does it actually publish to Instagram?
+
+                    </button>
+
+                </h2>
+
+
+                <div
+                    id="faqThree"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#faqAccordion"
+                >
+
+                    <div class="accordion-body text-muted">
+
+                        Live Instagram publishing requires the
+                        official Meta / Instagram API connection.
+                        The application does not falsely mark a
+                        post as published without API confirmation.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     CTA
+========================================== -->
+
+<section class="cta">
+
+    <div class="container">
+
+        <div class="cta-box">
+
+            <h2>
+                Ready to automate your Instagram content for a full year?
+            </h2>
+
+            <p>
+                Plan 365 days of content, schedule everything
+                in advance and save hours of manual work.
+            </p>
+
+            <a
+                href="{% url 'signup' %}"
+                class="cta-btn"
+            >
+
+                Start Scheduling
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <div class="footer-main">
+
+        <div class="container">
+
+            <div class="row g-5">
+
+
+                <!-- BRAND -->
+
+                <div class="col-lg-4">
+
+                    <a href="{% url 'home' %}" class="footer-brand">
+                        <img src="{% static 'images/biz499-logo.png' %}"
+                             alt="biz499"
+                             class="footer-logo">
+                    </a>
+
+
+                    <p class="footer-description">
+
+                        Smart Instagram content scheduling
+                        for creators, brands, agencies and
+                        growing businesses.
+
+                    </p>
+
+
+                    <div class="socials">
+
+                        <a href="#" class="social">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+                        <a href="#" class="social">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+
+                        <a href="#" class="social">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+
+                        <a href="#" class="social">
+                            <i class="bi bi-twitter-x"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCT -->
+
+                <div class="col-6 col-lg-2">
+
+                    <div class="footer-title">
+                        Product
+                    </div>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="#features">
+                                Features
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#how-it-works">
+                                How It Works
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#pricing">
+                                Pricing
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#faq">
+                                FAQ
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- COMPANY -->
+
+                <div class="col-6 col-lg-2">
+
+                    <div class="footer-title">
+                        Company
+                    </div>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="#">
+                                About Us
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Contact
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Privacy Policy
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Terms
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- RESOURCES -->
+
+                <div class="col-6 col-lg-2">
+
+                    <div class="footer-title">
+                        Resources
+                    </div>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="#">
+                                Help Center
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Guides
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Documentation
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Support
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- CTA -->
+
+                <div class="col-6 col-lg-2">
+
+                    <div class="footer-title">
+                        Get Started
+                    </div>
+
+                    <p
+                        class="text-muted"
+                        style="font-size:13px;line-height:1.7;"
+                    >
+                        Start planning your Instagram
+                        content for the next 365 days.
+                    </p>
+
+
+                    <a
+                        href="{% url 'signup' %}"
+                        class="start-btn d-inline-block mt-2"
+                    >
+
+                        Start Free
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER BOTTOM -->
+
+    <div class="footer-bottom">
+
+        <div class="container">
+
+            <div class="row align-items-center g-3">
+
+                <div class="col-md-4">
+
+                    © 2026 biz499.com.
+                    All rights reserved.
+
+                </div>
+
+
+                <div class="col-md-4 text-center">
+
+                    <span class="reserved">
+                        Reserved by biz499 Marketing & App
+                    </span>
+
+                </div>
+
+
+                <div class="col-md-4 text-md-end">
+
+                    Instagram Automation Platform
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+</body>
+</html>

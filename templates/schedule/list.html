@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}My Schedules - IG Scheduler{% endblock %}
+{% block page_header %}My Content Schedules{% endblock %}
+
+{% block content %}
+<div class="card-custom p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="fw-bold m-0"><i class="bi bi-clock-history text-primary me-2"></i> Active & Past Schedules</h5>
+            <small class="text-muted">Manage your generated 365-day Instagram campaigns</small>
+        </div>
+        <a href="{% url 'schedule_create' %}" class="btn btn-dark fw-bold rounded-3">
+            <i class="bi bi-plus-lg me-1"></i> Create New Schedule
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Schedule Name</th>
+                    <th>Start Date</th>
+                    <th>Duration</th>
+                    <th>Frequency</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sch in schedules %}
+                <tr>
+                    <td class="fw-bold">{{ sch.name }}</td>
+                    <td>{{ sch.start_date|date:"M d, Y" }}</td>
+                    <td><span class="badge bg-dark px-3 py-2 rounded-pill">{{ sch.duration_days }} Days</span></td>
+                    <td>{{ sch.get_frequency_display }}</td>
+                    <td>
+                        {% if sch.status == 'active' %}
+                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill">{{ sch.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'schedule_toggle_pause' sch.id %}" class="btn btn-sm btn-outline-warning rounded-2">
+                            {% if sch.status == 'active' %}<i class="bi bi-pause-fill"></i> Pause{% else %}<i class="bi bi-play-fill"></i> Resume{% endif %}
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">
+                        No schedules created yet. <a href="{% url 'schedule_create' %}" class="fw-bold text-dark">Create your 1-Year Schedule now!</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

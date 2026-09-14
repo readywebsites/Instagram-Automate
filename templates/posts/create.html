@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Create & Schedule Post - IG Scheduler{% endblock %}
+{% block page_header %}Schedule New Instagram Post{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- FORM COLUMN -->
+    <div class="col-lg-7">
+        <div class="card-custom p-4">
+            <h5 class="fw-bold mb-4"><i class="bi bi-plus-circle-fill text-primary me-2"></i> Post Details</h5>
+
+            <form method="POST" enctype="multipart/form-data" id="postCreateForm">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Target Instagram Account</label>
+                    {{ form.account }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Upload Image</label>
+                    {{ form.image }}
+                    <small class="text-muted d-block mt-1">Supported: JPG, JPEG, PNG, WEBP (Max 10MB)</small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label fw-semibold m-0">Caption</label>
+                        <small class="text-muted"><span id="charCounter">0</span> / 2,200 characters</small>
+                    </div>
+                    {{ form.caption }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Hashtags</label>
+                    {{ form.hashtags }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Scheduled Date & Time</label>
+                    {{ form.scheduled_at }}
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-3">
+                    <i class="bi bi-calendar-check me-2"></i> Confirm & Schedule Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- INSTAGRAM LIVE PREVIEW COLUMN -->
+    <div class="col-lg-5">
+        <div class="card-custom p-4 bg-light">
+            <h6 class="fw-bold text-muted mb-3 text-uppercase" style="font-size: 12px; letter-spacing: 1px;">
+                <i class="bi bi-instagram text-danger me-1"></i> Live Instagram Preview
+            </h6>
+
+            <!-- Mock Instagram Card -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <!-- Header -->
+                <div class="p-3 d-flex align-items-center justify-content-between border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="user-avatar" style="width: 32px; height: 32px; font-size: 12px;">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                        <span class="fw-bold" style="font-size: 14px;">{{ user.username }}</span>
+                    </div>
+                    <i class="bi bi-three-dots"></i>
+                </div>
+
+                <!-- Image -->
+                <div class="bg-dark d-flex align-items-center justify-content-center" style="height: 280px;">
+                    <img id="previewImage" src="" class="w-100 h-100 d-none" style="object-fit: cover;">
+                    <div id="previewPlaceholder" class="text-center text-muted p-4">
+                        <i class="bi bi-image fs-1 d-block mb-2 text-secondary"></i>
+                        Image preview will appear here
+                    </div>
+                </div>
+
+                <!-- Action Icons -->
+                <div class="p-3 pb-0 d-flex justify-content-between fs-5 text-dark">
+                    <div class="d-flex gap-3">
+                        <i class="bi bi-heart"></i>
+                        <i class="bi bi-chat"></i>
+                        <i class="bi bi-send"></i>
+                    </div>
+                    <i class="bi bi-bookmark"></i>
+                </div>
+
+                <!-- Caption Content -->
+                <div class="p-3" style="font-size: 13px;">
+                    <span class="fw-bold me-1">{{ user.username }}</span>
+                    <span id="previewCaptionText">New collection is here ✨</span>
+                    <div class="text-primary mt-1" id="previewHashtagsText">#fashion #style</div>
+                    <small class="text-muted mt-2 d-block" style="font-size: 10px;" id="previewDateText">JUST NOW</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const captionInput = document.querySelector('textarea[name="caption"]');
+    const hashtagsInput = document.querySelector('input[name="hashtags"]');
+    const imageInput = document.querySelector('input[name="image"]');
+    const dateInput = document.querySelector('input[name="scheduled_at"]');
+
+    const charCounter = document.getElementById('charCounter');
+    const previewCaptionText = document.getElementById('previewCaptionText');
+    const previewHashtagsText = document.getElementById('previewHashtagsText');
+    const previewImage = document.getElementById('previewImage');
+    const previewPlaceholder = document.getElementById('previewPlaceholder');
+    const previewDateText = document.getElementById('previewDateText');
+
+    if (captionInput) {
+        captionInput.addEventListener('input', function() {
+            charCounter.innerText = this.value.length;
+            previewCaptionText.innerText = this.value || "Your caption preview...";
+        });
+    }
+
+    if (hashtagsInput) {
+        hashtagsInput.addEventListener('input', function() {
+            previewHashtagsText.innerText = this.value;
+        });
+    }
+
+    if (imageInput) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('d-none');
+                    previewPlaceholder.classList.add('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (dateInput) {
+        dateInput.addEventListener('change', function() {
+            previewDateText.innerText = this.value ? "SCHEDULED FOR " + this.value : "JUST NOW";
+        });
+    }
+</script>
+{% endblock %}

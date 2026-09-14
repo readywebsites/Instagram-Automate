@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Content Calendar - IG Scheduler{% endblock %}
+{% block page_header %}Interactive Content Calendar{% endblock %}
+
+{% block extra_css %}
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+<style>
+    .fc-event {
+        cursor: pointer;
+        border: none !important;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card-custom p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="fw-bold m-0"><i class="bi bi-calendar3 text-primary me-2"></i> 365-Day Visual Schedule</h5>
+            <small class="text-muted">View all your upcoming, published, and failed Instagram posts</small>
+        </div>
+        <div>
+            <a href="{% url 'schedule_create' %}" class="btn btn-dark fw-bold rounded-3">
+                <i class="bi bi-plus-lg me-1"></i> New 1-Year Schedule
+            </a>
+        </div>
+    </div>
+
+    <!-- Status Legend -->
+    <div class="d-flex flex-wrap gap-3 mb-4 p-3 bg-light rounded-3" style="font-size: 13px;">
+        <span class="fw-bold">Legend:</span>
+        <span><i class="bi bi-circle-fill text-primary me-1"></i> Scheduled</span>
+        <span><i class="bi bi-circle-fill text-success me-1"></i> Published</span>
+        <span><i class="bi bi-circle-fill text-danger me-1"></i> Failed</span>
+        <span><i class="bi bi-circle-fill text-secondary me-1"></i> Draft</span>
+    </div>
+
+    <!-- Calendar Container -->
+    <div id="calendar" class="p-2"></div>
+</div>
+
+<!-- EVENT DETAIL MODAL -->
+<div class="modal fade" id="postModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold" id="modalTitle">Post Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <img id="modalImage" src="" class="img-fluid rounded-3 shadow-sm d-none" style="max-height: 250px; object-fit: cover;">
+                </div>
+                <div class="mb-2">
+                    <span id="modalStatusBadge" class="badge bg-secondary px-3 py-2 rounded-pill">Status</span>
+                </div>
+                <p class="fw-bold mb-1" id="modalTime" style="font-size: 14px;"></p>
+                <p id="modalCaption" class="text-muted" style="font-size: 14px;"></p>
+                <div id="modalError" class="alert alert-danger py-2 small d-none"></div>
+            </div>
+            <div class="modal-footer border-top">
+                <a id="modalDetailBtn" href="#" class="btn btn-dark fw-bold rounded-2">View & Edit Details</a>
+                <button type="button" class="btn btn-secondary fw-bold rounded-2" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listYear'
+        },
+        buttonText: {
+            today: 'Today',
+            month: 'Month View',
+            week: 'Week View',
+            list: 'Year List View'
+        },
+        events: "{% url 'calendar_events_api' %}",
+        eventClick: function(info) {
+            var event = info.event;
+            var props = event.extendedProps;
+
+            document.getElementById('modalTitle').innerText = event.title;
+            document.getElementById('modalTime').innerText = "Scheduled for: " + props.scheduled_at;
+            document.getElementById('modalCaption').innerText = props.caption || "No caption provided.";
+            document.getElementById('modalStatusBadge').innerText = props.status;
+
+            var imgEl = document.getElementById('modalImage');
+            if (props.image_url) {
+                imgEl.src = props.image_url;
+                imgEl.classList.remove('d-none');
+            } else {
+                imgEl.classList.add('d-none');
+            }
+
+            var errEl = document.getElementById('modalError');
+            if (props.error_message) {
+                errEl.innerText = "Error: " + props.error_message;
+                errEl.classList.remove('d-none');
+            } else {
+                errEl.classList.add('d-none');
+            }
+
+            document.getElementById('modalDetailBtn').href = "/posts/" + event.id + "/";
+
+            var myModal = new bootstrap.Modal(document.getElementById('postModal'));
+            myModal.show();
+        }
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}

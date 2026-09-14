@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Image Upload - IG Scheduler{% endblock %}
+{% block page_header %}Bulk Content Library & Image Upload{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- UPLOAD CARD -->
+    <div class="col-lg-5">
+        <div class="card-custom p-4">
+            <h5 class="fw-bold mb-2"><i class="bi bi-cloud-arrow-up-fill text-primary me-2"></i> Upload Images</h5>
+            <p class="text-muted small mb-4">Select or drag & drop images into your content library for 365-day schedule generation.</p>
+
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                {% csrf_token %}
+                <div class="border border-2 border-dashed rounded-4 p-4 text-center bg-light mb-3" id="dropZone" style="border-color: #cbd5e1 !important; cursor: pointer; transition: all 0.2s ease;">
+                    <i class="bi bi-images display-4 text-secondary mb-2 d-block"></i>
+                    <h6 class="fw-bold m-0">Drag & Drop Images Here</h6>
+                    <small class="text-muted d-block my-2">or click to browse from device</small>
+                    {{ form.images }}
+                    <small class="text-secondary d-block mt-2" style="font-size: 11px;">Supported: JPG, JPEG, PNG, WEBP (Max 10MB per file)</small>
+                </div>
+
+                <div id="filePreviewContainer" class="d-flex flex-wrap gap-2 mb-3"></div>
+
+                <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-3">
+                    <i class="bi bi-check2-circle me-1"></i> Upload Selected Images to Library
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONTENT LIBRARY GRID -->
+    <div class="col-lg-7">
+        <div class="card-custom p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold m-0"><i class="bi bi-grid-fill text-warning me-2"></i> Content Library ({{ images.count }})</h5>
+                <a href="{% url 'schedule_create' %}" class="btn btn-sm btn-dark fw-bold rounded-2">
+                    Use in 1-Year Schedule &rarr;
+                </a>
+            </div>
+
+            <div class="row g-3" style="max-height: 520px; overflow-y: auto;" id="libraryGrid">
+                {% for img in images %}
+                <div class="col-6 col-sm-4 col-md-3 library-item" draggable="true">
+                    <div class="position-relative border rounded-3 overflow-hidden group shadow-sm bg-white">
+                        <img src="{{ img.image.url }}" class="w-100" style="height: 120px; object-fit: cover;">
+                        <div class="p-2 bg-white text-truncate small fw-semibold d-flex justify-content-between align-items-center" style="font-size: 11px;">
+                            <span class="text-truncate">{{ img.title|truncatechars:14 }}</span>
+                            <i class="bi bi-grip-vertical text-muted cursor-move" title="Drag to reorder"></i>
+                        </div>
+                        <form method="POST" action="{% url 'delete_content_item' img.id %}" class="position-absolute top-0 end-0 p-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger p-1 rounded-circle lh-1" onclick="return confirm('Delete this image?');" title="Remove image">
+                                <i class="bi bi-x fs-6"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5 text-muted">
+                    <i class="bi bi-images fs-1 d-block mb-2 text-secondary"></i>
+                    No images uploaded yet. Upload images on the left to start building your 365-day queue.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.querySelector('input[type="file"]');
+    const previewContainer = document.getElementById('filePreviewContainer');
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '#e2e8f0';
+        dropZone.style.borderColor = '#3b82f6';
+    });
+
+    dropZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '#f8fafc';
+        dropZone.style.borderColor = '#cbd5e1';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '#f8fafc';
+        dropZone.style.borderColor = '#cbd5e1';
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            updatePreviews();
+        }
+    });
+
+    fileInput.addEventListener('change', updatePreviews);
+
+    function updatePreviews() {
+        previewContainer.innerHTML = '';
+        const files = Array.from(fileInput.files);
+        files.forEach((file, index) => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'position-relative d-inline-block';
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'rounded-2 border shadow-sm';
+                    img.style.width = '65px';
+                    img.style.height = '65px';
+                    img.style.objectFit = 'cover';
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'btn btn-danger btn-sm p-0 rounded-circle position-absolute top-0 end-0 translate-middle';
+                    removeBtn.style.width = '18px';
+                    removeBtn.style.height = '18px';
+                    removeBtn.style.fontSize = '10px';
+                    removeBtn.innerText = '×';
+                    removeBtn.onclick = () => {
+                        const dt = new DataTransfer();
+                        const currentFiles = Array.from(fileInput.files);
+                        currentFiles.forEach((f, i) => { if (i !== index) dt.items.add(f); });
+                        fileInput.files = dt.files;
+                        updatePreviews();
+                    };
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(removeBtn);
+                    previewContainer.appendChild(wrapper);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+{% endblock %}

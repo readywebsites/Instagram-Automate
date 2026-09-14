@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - IG Scheduler{% endblock %}
+{% block page_header %}1-Year Content Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- QUICK ACTIONS BAR -->
+<div class="card-custom p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h5 class="fw-bold m-0"><i class="bi bi-rocket-takeoff-fill text-warning me-2"></i> Quick Actions</h5>
+            <small class="text-muted">Manage your 365-day Instagram publishing pipeline</small>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'schedule_create' %}" class="btn btn-dark fw-bold px-3 py-2 rounded-3">
+                <i class="bi bi-calendar-plus-fill text-warning me-1"></i> Create Year Schedule
+            </a>
+            <a href="{% url 'bulk_upload' %}" class="btn btn-outline-dark fw-bold px-3 py-2 rounded-3">
+                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload Images
+            </a>
+            <a href="{% url 'instagram_accounts' %}" class="btn btn-outline-danger fw-bold px-3 py-2 rounded-3">
+                <i class="bi bi-instagram me-1"></i> Connect Instagram
+            </a>
+            <a href="{% url 'calendar' %}" class="btn btn-outline-primary fw-bold px-3 py-2 rounded-3">
+                <i class="bi bi-calendar3 me-1"></i> View Calendar
+            </a>
+            <a href="{% url 'posts_list' %}" class="btn btn-outline-secondary fw-bold px-3 py-2 rounded-3">
+                <i class="bi bi-collection-play me-1"></i> View All Posts
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- STATS GRID -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-xl-2.4">
+        <div class="card-custom p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted fw-bold" style="font-size: 13px;">Total Posts</span>
+                <div class="p-2 bg-primary-subtle text-primary rounded-3"><i class="bi bi-layers-fill fs-5"></i></div>
+            </div>
+            <h2 class="fw-bold m-0">{{ total_posts }}</h2>
+            <small class="text-muted" style="font-size: 11px;">In system</small>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2.4">
+        <div class="card-custom p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted fw-bold" style="font-size: 13px;">Scheduled</span>
+                <div class="p-2 bg-info-subtle text-info rounded-3"><i class="bi bi-clock-history fs-5"></i></div>
+            </div>
+            <h2 class="fw-bold m-0 text-info">{{ scheduled_posts }}</h2>
+            <small class="text-muted" style="font-size: 11px;">Pending release</small>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2.4">
+        <div class="card-custom p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted fw-bold" style="font-size: 13px;">Published</span>
+                <div class="p-2 bg-success-subtle text-success rounded-3"><i class="bi bi-check-circle-fill fs-5"></i></div>
+            </div>
+            <h2 class="fw-bold m-0 text-success">{{ published_posts }}</h2>
+            <small class="text-muted" style="font-size: 11px;">Live on Instagram</small>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2.4">
+        <div class="card-custom p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted fw-bold" style="font-size: 13px;">Failed</span>
+                <div class="p-2 bg-danger-subtle text-danger rounded-3"><i class="bi bi-exclamation-triangle-fill fs-5"></i></div>
+            </div>
+            <h2 class="fw-bold m-0 text-danger">{{ failed_posts }}</h2>
+            <small class="text-muted" style="font-size: 11px;">Requires retry</small>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2.4">
+        <div class="card-custom p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted fw-bold" style="font-size: 13px;">Remaining</span>
+                <div class="p-2 bg-warning-subtle text-warning rounded-3"><i class="bi bi-hourglass-split fs-5"></i></div>
+            </div>
+            <h2 class="fw-bold m-0 text-warning">{{ remaining_posts }}</h2>
+            <small class="text-muted" style="font-size: 11px;">Drafts & pending</small>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card-custom p-3">
+            <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Total Library Images</div>
+            <h3 class="fw-bold m-0"><i class="bi bi-images text-primary me-2"></i>{{ total_images }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-custom p-3">
+            <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Connected IG Account</div>
+            <h3 class="fw-bold m-0" style="font-size: 18px;">
+                {% if connected_account %}
+                    <span class="text-success"><i class="bi bi-patch-check-fill me-1"></i> @{{ connected_account.username }}</span>
+                {% else %}
+                    <span class="text-muted"><i class="bi bi-slash-circle me-1"></i> Not Connected</span>
+                {% endif %}
+            </h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-custom p-3">
+            <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Posts This Month</div>
+            <h3 class="fw-bold m-0"><i class="bi bi-calendar-month text-info me-2"></i>{{ posts_this_month }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-custom p-3">
+            <div class="text-muted fw-bold mb-1" style="font-size: 12px;">Posts This Year (365 Days)</div>
+            <h3 class="fw-bold m-0"><i class="bi bi-calendar-check text-success me-2"></i>{{ posts_this_year }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN TABLES SECTION -->
+<div class="row g-4">
+    <!-- Upcoming Scheduled Posts -->
+    <div class="col-lg-8">
+        <div class="card-custom p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold m-0"><i class="bi bi-clock-fill text-primary me-2"></i> Upcoming Scheduled Posts</h5>
+                <a href="{% url 'posts_list' %}" class="btn btn-sm btn-link text-decoration-none fw-bold">View All Posts &rarr;</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Image</th>
+                            <th>Schedule Date</th>
+                            <th>Caption Preview</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in upcoming_posts %}
+                        <tr>
+                            <td>
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}" width="48" height="48" class="rounded-3" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
+                                        <i class="bi bi-image text-muted"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="fw-bold" style="font-size: 14px;">{{ post.scheduled_at|date:"M d, Y" }}</div>
+                                <small class="text-muted" style="font-size: 12px;">{{ post.scheduled_at|date:"h:i A" }}</small>
+                            </td>
+                            <td>
+                                <div class="text-truncate" style="max-width: 250px;">
+                                    {{ post.caption|default:"No caption" }}
+                                </div>
+                                <small class="text-secondary">{{ post.hashtags|truncatechars:30 }}</small>
+                            </td>
+                            <td>
+                                <span class="badge badge-{{ post.status }} px-3 py-2 rounded-pill">
+                                    {{ post.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'post_detail' post.id %}" class="btn btn-sm btn-outline-secondary rounded-2">
+                                    <i class="bi bi-eye-fill"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
+                                No upcoming posts scheduled yet. <a href="{% url 'schedule_create' %}" class="fw-bold text-dark">Create 1-Year Schedule</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar / Next Scheduled Post Widget -->
+    <div class="col-lg-4">
+        <div class="card-custom p-4 mb-4 bg-dark text-white">
+            <h6 class="fw-bold text-warning mb-3"><i class="bi bi-lightning-fill"></i> NEXT SCHEDULED POST</h6>
+            {% if next_post %}
+                <div class="d-flex gap-3 align-items-center mb-3">
+                    {% if next_post.image %}
+                        <img src="{{ next_post.image.url }}" width="70" height="70" class="rounded-3 border border-secondary" style="object-fit: cover;">
+                    {% endif %}
+                    <div>
+                        <h6 class="fw-bold text-white mb-1">{{ next_post.scheduled_at|date:"M d, Y @ h:i A" }}</h6>
+                        <span class="badge bg-warning text-dark font-monospace">{{ next_post.scheduled_at|timeuntil }} left</span>
+                    </div>
+                </div>
+                <p class="text-light small mb-3" style="font-size: 13px;">
+                    {{ next_post.caption|truncatechars:100|default:"No caption attached." }}
+                </p>
+                <a href="{% url 'post_detail' next_post.id %}" class="btn btn-sm btn-light w-100 fw-bold rounded-2">Manage Next Post</a>
+            {% else %}
+                <div class="text-center py-3 text-secondary">
+                    <p class="mb-2">No post in queue</p>
+                    <a href="{% url 'schedule_create' %}" class="btn btn-sm btn-warning fw-bold">Generate Schedule</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card-custom p-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-info-circle-fill text-primary"></i> Instagram API Status</h6>
+            {% if connected_account %}
+                <div class="alert alert-success border-0 py-2 small mb-2">
+                    <i class="bi bi-check-circle-fill me-1"></i> Connected to @{{ connected_account.username }}
+                </div>
+            {% else %}
+                <div class="alert alert-warning border-0 py-2 small mb-2">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Meta API Not Connected
+                </div>
+                <p class="text-muted small mb-3">Posts will remain in Scheduled state until Meta Graph API credentials are configured in Settings.</p>
+                <a href="{% url 'instagram_accounts' %}" class="btn btn-sm btn-outline-danger w-100 fw-bold">Connect Meta API</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Instagram Accounts - IG Scheduler{% endblock %}
+{% block page_header %}Connected Instagram Accounts{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- META API CONFIGURATION STATUS CARD -->
+    <div class="col-12">
+        <div class="card-custom p-4 border-start border-4 {% if meta_configured %}border-success{% else %}border-warning{% endif %}">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h5 class="fw-bold m-0">
+                        {% if meta_configured %}
+                            <i class="bi bi-patch-check-fill text-success me-2"></i> Meta Graph API Ready
+                        {% else %}
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i> Meta Graph API Not Configured
+                        {% endif %}
+                    </h5>
+                    <p class="text-muted small m-0 mt-1">
+                        {% if meta_configured %}
+                            Meta App ID <code>{{ meta_app_id }}</code> is active in <code>.env</code>. You can connect your official Instagram Professional account below.
+                        {% else %}
+                            Add <code>META_APP_ID</code>, <code>META_APP_SECRET</code>, and <code>META_REDIRECT_URI</code> to your <code>.env</code> file to enable Meta OAuth.
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'instagram_connect' %}" class="btn btn-danger fw-bold px-4 py-2 rounded-3">
+                        <i class="bi bi-instagram me-2"></i> Connect Instagram Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCOUNTS LIST -->
+    <div class="col-12">
+        <div class="card-custom p-4">
+            <h5 class="fw-bold mb-4"><i class="bi bi-people-fill text-primary me-2"></i> Connected Accounts ({{ accounts.count }})</h5>
+
+            <div class="row g-3">
+                {% for acc in accounts %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border rounded-4 p-4 position-relative shadow-sm">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="p-3 bg-danger-subtle text-danger rounded-circle fs-3">
+                                <i class="bi bi-instagram"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold m-0">@{{ acc.username|default:"Instagram Account" }}</h6>
+                                <small class="text-muted" style="font-size: 11px;">ID: {{ acc.instagram_user_id|default:"Pending" }}</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top small">
+                            <span>Status:</span>
+                            {% if acc.connected %}
+                                <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary px-3 py-1 rounded-pill">Disconnected</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-3">
+                            {% if acc.connected %}
+                            <form method="POST" action="{% url 'instagram_disconnect' acc.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger w-100 fw-bold rounded-2" onclick="return confirm('Disconnect this Instagram account?');">
+                                    Disconnect Account
+                                </button>
+                            </form>
+                            {% else %}
+                            <a href="{% url 'instagram_connect' %}" class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-2">
+                                Reconnect Account
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5 text-muted">
+                    <i class="bi bi-instagram fs-1 d-block mb-2 text-danger"></i>
+                    No Instagram accounts connected yet. Click <strong>Connect Instagram Account</strong> above to get started.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

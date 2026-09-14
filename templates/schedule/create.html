@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Create 1-Year Schedule - IG Scheduler{% endblock %}
+{% block page_header %}Create 1-Year Schedule{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center">
+    <div class="col-lg-8">
+        <div class="card-custom p-4 shadow-sm">
+            <h3 class="fw-bold mb-4 text-center">Create 1-Year Schedule</h3>
+
+            <form method="POST" enctype="multipart/form-data" id="scheduleForm">
+                {% csrf_token %}
+
+                <!-- Campaign Name -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Schedule / Campaign Name</label>
+                    {{ form.name }}
+                </div>
+
+                <!-- Upload Images -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold"><i class="bi bi-cloud-arrow-up-fill text-primary me-1"></i> Upload Images (Optional)</label>
+                    {{ form.images }}
+                    <small class="text-muted d-block mt-1">Select photos from your device, or use pre-uploaded images from your Content Library ({{ user_images_count }} available).</small>
+                </div>
+
+                <!-- Default Description -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Default Description</label>
+                    {{ form.default_description }}
+                </div>
+
+                <!-- Default Hashtags -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Default Hashtags</label>
+                    {{ form.default_hashtags }}
+                </div>
+
+                <!-- Start Date & Posting Time -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Start Date</label>
+                        {{ form.start_date }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Posting Time</label>
+                        {{ form.posting_time }}
+                    </div>
+                </div>
+
+                <!-- Duration & Frequency -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Duration</label>
+                        {{ form.duration_days }}
+                    </div>
+                    <div class="col-md-6" id="customDaysCol" style="display: none;">
+                        <label class="form-label fw-bold">Custom Days</label>
+                        {{ form.custom_days }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Frequency</label>
+                        {{ form.frequency }}
+                    </div>
+                </div>
+
+                <!-- Timezone & Overflow Strategy -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Timezone</label>
+                        {{ form.timezone }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Image Overflow Strategy</label>
+                        {{ form.overflow_strategy }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-3 fs-5">
+                    Generate 365-Day Schedule
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const durationSelect = document.getElementById('id_duration_days');
+    const customDaysCol = document.getElementById('customDaysCol');
+
+    if (durationSelect) {
+        durationSelect.addEventListener('change', function() {
+            if (this.value === '0') {
+                customDaysCol.style.display = 'block';
+            } else {
+                customDaysCol.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}
